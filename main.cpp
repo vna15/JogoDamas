@@ -85,7 +85,7 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
        colunaint = (int)coluna - 96;
 
        if(pecastab[linha][colunaint]=='o'){
-            if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' '){
+            if((pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ')||(pecastab[linha-1][colunaint-1]=='x' || pecastab[linha-1][colunaint+1] =='x')){
                 if((colunaint == 2||4||6||8 && linha == 1||3||5||7) || (colunaint == 1||3||5||7 && linha == 2||4||6||8)){
                     posicao_correta = true;
                 }
