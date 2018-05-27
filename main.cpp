@@ -181,7 +181,45 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                               coluna_intermediaria2 = nova_coluna-1;
                               coluna_intermediaria = nova_coluna-3;
                            }
+                           if(pecastab[nova_linha+1][nova_colunaint+1]=='x' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='x'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
                            if(pecastab[nova_linha+1][nova_colunaint-1]=='x' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='x'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha-1][nova_colunaint+1]=='x' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-1][nova_colunaint+3]=='x'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                    }
+                    else if(nova_colunaint==colunaint){
+                           if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='x'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha+1][nova_colunaint-1]=='x' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+3][nova_colunaint-1]=='x'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha-1][nova_colunaint+1]=='x' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-3][nova_colunaint+1]=='x'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha+1][nova_colunaint+1]=='x' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+3][nova_colunaint+1]=='x'){
                               linha_intermediaria2 = nova_linha+1;
                               linha_intermediaria = nova_linha+1;
                               coluna_intermediaria2 = nova_coluna-1;
@@ -331,7 +369,45 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
                               coluna_intermediaria2 = nova_coluna-1;
                               coluna_intermediaria = nova_coluna-3;
                            }
+                           if(pecastab[nova_linha+1][nova_colunaint+1]=='o' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='o'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
                            if(pecastab[nova_linha+1][nova_colunaint-1]=='o' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='o'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha-1][nova_colunaint+1]=='o' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-1][nova_colunaint+3]=='o'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                    }
+                    else if(nova_colunaint==colunaint){
+                           if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='o'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha+1][nova_colunaint-1]=='o' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+3][nova_colunaint-1]=='o'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha-1][nova_colunaint+1]=='o' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-3][nova_colunaint+1]=='o'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha+1][nova_colunaint+1]=='o' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+3][nova_colunaint+1]=='o'){
                               linha_intermediaria2 = nova_linha+1;
                               linha_intermediaria = nova_linha+1;
                               coluna_intermediaria2 = nova_coluna-1;
