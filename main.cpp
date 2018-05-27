@@ -1,6 +1,7 @@
 #include <iostream>
 #include <locale>
 #include <cstdlib>
+#include <cmath>
 
 using namespace std;
 
@@ -33,19 +34,17 @@ void computador(char pecastab[9][9], bool &fim_de_jogo){
        bool posicao_correta = false;
        int linha, colunaint, nova_colunaint, nova_linha;
 
-       // VerificaÃ§Ã£o posiÃ§Ã£o inicial
+       // Verificação posição inicial
        do{
        linha = 1 + rand()%8;
        colunaint = 1 + rand()%8;
        if(pecastab[linha][colunaint]=='o'){
-            if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' '){
                 if((colunaint == 2||4||6||8 && linha == 1||3||5||7) || (colunaint == 1||3||5||7 && linha == 2||4||6||8)){
                     posicao_correta = true;
                 }
-            }
        }
        }while(posicao_correta == false);
-       // VerificaÃ§Ã£o posiÃ§Ã£o final
+       // Verificação posição final
        do{
        nova_colunaint = 1 + rand()%8;
        nova_linha = 1 + rand()%8;
@@ -75,13 +74,13 @@ void computador(char pecastab[9][9], bool &fim_de_jogo){
 }
 
 void jogador2(char pecastab[9][9], bool &fim_de_jogo){
-       bool posicao_correta = false;
+       bool posicao_correta = false, posicao_final_correta = false;
        char coluna, nova_coluna;
-       int linha, colunaint, nova_colunaint, nova_linha;
+       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, linha_intermediaria2, coluna_intermediaria, coluna_intermediaria2, cont=0;
        cout << endl << "     Vez do Jogador 2" << endl;
-       // VerificaÃ§Ã£o posiÃ§Ã£o inicial
+       // Verificação posição inicial
        do{
-       cout << "     Digite  a posiÃ§Ã£o da peÃ§a que deseja mover (Exemplo: b 2): ";
+       cout << "     Digite  a posição da peça que deseja mover (Exemplo: b 2): ";
        cin >> coluna >> linha;
        colunaint = (int)coluna - 96;
 
@@ -91,119 +90,282 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                     posicao_correta = true;
                 }
                 else{
-                    cout << "     PosiÃ§Ã£o invÃ¡lida" << endl;
+                    cout << "     Posição inválida" << endl;
                 }
             }
             else{
-                cout << "     PosiÃ§Ã£o invÃ¡lida" << endl;
+                cout << "     Posição inválida" << endl;
             }
        }
        else{
-         cout << "     PosiÃ§Ã£o invÃ¡lida" << endl;
+         cout << "     Posição inválida" << endl;
        }
 
        }while(posicao_correta == false);
-       // VerificaÃ§Ã£o posiÃ§Ã£o final
+       // Verificação posição final
        do{
-       cout << "     Digite a posiÃ§Ã£o final da peÃ§a (Exemplo: d 4): ";
+       cout << "     Digite a posição final da peça (Exemplo: d 4): ";
        cin >> nova_coluna >> nova_linha;
        nova_colunaint = (int)nova_coluna - 96;
 
-       if((pecastab[nova_linha][nova_colunaint]=='1') || (pecastab[nova_linha][nova_colunaint]=='o') || (pecastab[nova_linha][nova_colunaint]=='x')){
-          posicao_correta = false;
-          cout << "     PosiÃ§Ã£o final invÃ¡lida" << endl;
+       if((pecastab[nova_linha][nova_colunaint]=='1')||(pecastab[nova_linha][nova_colunaint]=='x') || (pecastab[nova_linha][nova_colunaint]=='o')){
+          cout << "     Posição final inválida" << endl;
        }
        else{
-            if((nova_colunaint == colunaint-1 || nova_colunaint == colunaint+1) && nova_linha == linha-1){
-                if(nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8){
-                    posicao_correta = true;
+            if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha-1){
+                if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
+                    pecastab[linha][colunaint] = ' ';
+                    pecastab[nova_linha][nova_colunaint] = 'o';
+                    posicao_final_correta = true;
                 }
                 else{
-                    posicao_correta = false;
-                    cout << "     PosiÃ§Ã£o final invÃ¡lida" << endl;
+                    cout << "     Posição final inválida" << endl;
                 }
             }
-            else{
-                posicao_correta = false;
-                cout << "     PosiÃ§Ã£o final invÃ¡lida" << endl;
+            else if(abs(nova_linha-linha)==2 && abs(nova_colunaint-colunaint)==2){
+                    if(nova_linha>linha){
+                        linha_intermediaria = nova_linha-1;
+                    }
+                    else{
+                        linha_intermediaria = nova_linha+1;
+                    }
+                    if(nova_colunaint>colunaint){
+                        coluna_intermediaria = nova_colunaint-1;
+                    }
+                    else{
+                        coluna_intermediaria = nova_colunaint+1;
+                    }
+                    if(pecastab[linha_intermediaria][coluna_intermediaria]=='x'){
+                        pecastab[linha][colunaint] = ' ';
+                        pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                        pecastab[nova_linha][nova_colunaint] = 'o';
+                        posicao_final_correta = true;
+                    }
+                    else{
+                        cout << "     Posição final inválida" << endl;
+                    }
             }
-       }
+            else if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
+                    if(nova_linha>linha){
+                        if(nova_colunaint>colunaint){
+                            linha_intermediaria2 = nova_linha-1;
+                            linha_intermediaria = nova_linha-3;
+                            coluna_intermediaria2 = nova_colunaint-1;
+                            coluna_intermediaria = nova_colunaint-3;
+                        }
+                        else{
+                            linha_intermediaria2 = nova_linha-1;
+                            linha_intermediaria = nova_linha-3;
+                            coluna_intermediaria2 = nova_colunaint+1;
+                            coluna_intermediaria = nova_colunaint+3;
+                        }
+                    }
+                    else if(nova_linha<linha){
+                        if(nova_colunaint>colunaint){
+                            linha_intermediaria2 = nova_linha+1;
+                            linha_intermediaria = nova_linha+3;
+                            coluna_intermediaria2 = nova_colunaint-1;
+                            coluna_intermediaria = nova_colunaint-3;
+                        }
+                        else{
+                            linha_intermediaria2 = nova_linha+1;
+                            linha_intermediaria = nova_linha+3;
+                            coluna_intermediaria2 = nova_colunaint+1;
+                            coluna_intermediaria = nova_colunaint+3;
+                        }
+                    }
+                    else if(nova_linha==linha){
+                           if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='x'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha+1][nova_colunaint-1]=='x' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='x'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                    }
+                    if(pecastab[linha_intermediaria][coluna_intermediaria]=='x' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='x'){
+                        pecastab[linha][colunaint] = ' ';
+                        pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                        pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
+                        pecastab[nova_linha][nova_colunaint] = 'o';
+                        posicao_final_correta = true;
+                    }
+                    else{
+                        cout << "     Posição final inválida" << endl;
+                    }
+            }
+        }
 
-       }while(posicao_correta == false);
-
-       pecastab[linha][colunaint] = ' ';
-       pecastab[nova_linha][nova_colunaint] = 'o';
+       }while(posicao_final_correta == false);
 
        tabuleiro(pecastab);
-       fim_de_jogo = false;
+
+       for(int i=1;i<9;i++){
+         for(int j=1;j<9;j++){
+            if(pecastab[i][j]=='x'){
+                cont++;
+            }
+         }
+       }
+       if(cont==0){
+         cout << "JOGADOR 2 VENCEU" << endl;
+         fim_de_jogo = true;
+       }
+
 }
 void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
-       bool posicao_correta = false;
+       bool posicao_correta = false, posicao_final_correta = false;
        char coluna, nova_coluna;
-       int linha, colunaint, nova_colunaint, nova_linha;
+       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, coluna_intermediaria, linha_intermediaria2, coluna_intermediaria2, cont=0;
        if(um_ou_dois == 1){
           cout << endl << "     Vez do Jogador 1" << endl;
        }
        else{
           cout << endl << "     Sua vez" << endl;
        }
-       // VerificaÃ§Ã£o posiÃ§Ã£o inicial
+       // Verificação posição inicial
        do{
-       cout << "     Digite  a posiÃ§Ã£o da peÃ§a que deseja mover (Exemplo: b 2): ";
+       cout << "     Digite  a posição da peça que deseja mover (Exemplo: b 2): ";
        cin >> coluna >> linha;
        colunaint = (int)coluna - 96;
 
        if(pecastab[linha][colunaint]=='x'){
-            if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' '){
+            if((pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ')||(pecastab[linha+1][colunaint-1]=='o' || pecastab[linha+1][colunaint+1] =='o')){
                 if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
                     posicao_correta = true;
                 }
                 else{
-                    cout << "     PosiÃ§Ã£o invÃ¡lida" << endl;
+                    cout << "     Posição inválida" << endl;
                 }
             }
             else{
-                cout << "     PosiÃ§Ã£o invÃ¡lida" << endl;
+                cout << "     Posição inválida" << endl;
             }
        }
        else{
-          cout << "     PosiÃ§Ã£o invÃ¡lida" << endl;
+          cout << "     Posição inválida" << endl;
        }
 
        }while(posicao_correta == false);
-       // VerificaÃ§Ã£o posiÃ§Ã£o final
+       // Verificação posição final
        do{
-       cout << "     Digite a posiÃ§Ã£o final da peÃ§a (Exemplo: d 4): ";
+       cout << "     Digite a posição final da peça (Exemplo: d 4): ";
        cin >> nova_coluna >> nova_linha;
        nova_colunaint = (int)nova_coluna - 96;
 
        if((pecastab[nova_linha][nova_colunaint]=='1')||(pecastab[nova_linha][nova_colunaint]=='x') || (pecastab[nova_linha][nova_colunaint]=='o')){
-          posicao_correta = false;
-          cout << "     PosiÃ§Ã£o final invÃ¡lida" << endl;
+          cout << "     Posição final inválida" << endl;
        }
        else{
             if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha+1){
                 if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
-                    posicao_correta = true;
+                    pecastab[linha][colunaint] = ' ';
+                    pecastab[nova_linha][nova_colunaint] = 'x';
+                    posicao_final_correta = true;
                 }
                 else{
-                    posicao_correta = false;
-                    cout << "     PosiÃ§Ã£o final invÃ¡lida" << endl;
+                    cout << "     Posição final inválida" << endl;
                 }
             }
-            else{
-                posicao_correta = false;
-                cout << "     PosiÃ§Ã£o final invÃ¡lida" << endl;
+            else if(abs(nova_linha-linha)==2 && abs(nova_colunaint-colunaint)==2){
+                    if(nova_linha>linha){
+                        linha_intermediaria = nova_linha-1;
+                    }
+                    else{
+                        linha_intermediaria = nova_linha+1;
+                    }
+                    if(nova_colunaint>colunaint){
+                        coluna_intermediaria = nova_colunaint-1;
+                    }
+                    else{
+                        coluna_intermediaria = nova_colunaint+1;
+                    }
+                    if(pecastab[linha_intermediaria][coluna_intermediaria]=='o'){
+                        pecastab[linha][colunaint] = ' ';
+                        pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                        pecastab[nova_linha][nova_colunaint] = 'x';
+                        posicao_final_correta = true;
+                    }
+                    else{
+                        cout << "     Posição final inválida" << endl;
+                    }
             }
-       }
+            else if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
+                    if(nova_linha>linha){
+                        if(nova_colunaint>colunaint){
+                            linha_intermediaria2 = nova_linha-1;
+                            linha_intermediaria = nova_linha-3;
+                            coluna_intermediaria2 = nova_colunaint-1;
+                            coluna_intermediaria = nova_colunaint-3;
+                        }
+                        else{
+                            linha_intermediaria2 = nova_linha-1;
+                            linha_intermediaria = nova_linha-3;
+                            coluna_intermediaria2 = nova_colunaint+1;
+                            coluna_intermediaria = nova_colunaint+3;
+                        }
+                    }
+                    else if(nova_linha<linha){
+                        if(nova_colunaint>colunaint){
+                            linha_intermediaria2 = nova_linha+1;
+                            linha_intermediaria = nova_linha+3;
+                            coluna_intermediaria2 = nova_colunaint-1;
+                            coluna_intermediaria = nova_colunaint-3;
+                        }
+                        else{
+                            linha_intermediaria2 = nova_linha+1;
+                            linha_intermediaria = nova_linha+3;
+                            coluna_intermediaria2 = nova_colunaint+1;
+                            coluna_intermediaria = nova_colunaint+3;
+                        }
+                    }
+                    else if(nova_linha==linha){
+                           if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='o'){
+                              linha_intermediaria2 = nova_linha-1;
+                              linha_intermediaria = nova_linha-1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                           if(pecastab[nova_linha+1][nova_colunaint-1]=='o' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='o'){
+                              linha_intermediaria2 = nova_linha+1;
+                              linha_intermediaria = nova_linha+1;
+                              coluna_intermediaria2 = nova_coluna-1;
+                              coluna_intermediaria = nova_coluna-3;
+                           }
+                    }
+                    if(pecastab[linha_intermediaria][coluna_intermediaria]=='o' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='o'){
+                        pecastab[linha][colunaint] = ' ';
+                        pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                        pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
+                        pecastab[nova_linha][nova_colunaint] = 'x';
+                        posicao_final_correta = true;
+                    }
+                    else{
+                        cout << "     Posição final inválida" << endl;
+                    }
+            }
+        }
 
-       }while(posicao_correta == false);
-
-       pecastab[linha][colunaint] = ' ';
-       pecastab[nova_linha][nova_colunaint] = 'x';
+       }while(posicao_final_correta == false);
 
        tabuleiro(pecastab);
-       fim_de_jogo = false;
+
+       for(int i=1;i<9;i++){
+         for(int j=1;j<9;j++){
+            if(pecastab[i][j]=='o'){
+                cont++;
+            }
+         }
+       }
+       if(cont==0){
+          cout << "JOGADOR 1 VENCEU" << endl;
+          fim_de_jogo = true;
+       }
 }
 int main()
 {
@@ -228,7 +390,7 @@ int main()
       cin >> menu_choice;
       if(menu_choice == 1){
           tabuleiro(pecastab);
-          cout << endl << "      Jogador 1: peÃ§a x" << endl << "      Jogador 2: peÃ§a o" << endl;
+          cout << endl << "      Jogador 1: peça x" << endl << "      Jogador 2: peça o" << endl;
           um_ou_dois = 1;
           do{
              jogador1(pecastab, fim_de_jogo, um_ou_dois);
@@ -238,7 +400,7 @@ int main()
       else{
           if(menu_choice == 2){
              tabuleiro(pecastab);
-             cout << "     VocÃª jogarÃ¡ com as peÃ§as x" << endl;
+             cout << "     Você jogará com as peças x" << endl;
              um_ou_dois = 2;
              do{
                jogador1(pecastab, fim_de_jogo, um_ou_dois);
