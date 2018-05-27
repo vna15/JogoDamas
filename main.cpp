@@ -363,12 +363,17 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
          }
        }
        if(cont==0){
-          cout << "JOGADOR 1 VENCEU" << endl;
           fim_de_jogo = true;
+            if(um_ou_dois == 1){
+               cout << "JOGADOR 1 VENCEU" << endl;
+            }
+            if(um_ou_dois == 2){
+               cout << "VOCÊ GANHOU" << endl;
+            }
        }
 }
-int main()
-{
+int main(){
+
       setlocale(LC_ALL, "Portuguese");
       bool fim_de_jogo = false;
       int menu_choice, um_ou_dois;
