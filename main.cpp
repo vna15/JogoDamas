@@ -2,6 +2,7 @@
 #include <locale>
 #include <cstdlib>
 #include <cmath>
+#include <ctime>
 
 using namespace std;
 
@@ -31,40 +32,37 @@ void tabuleiro(char pecastab[9][9]){
 
 }
 void computador(char pecastab[9][9], bool &fim_de_jogo){
-       bool posicao_correta = false;
+       bool posicao_correta = false, posicao_final_correta = false;
        int linha, colunaint, nova_colunaint, nova_linha;
 
        // Verificação posição inicial
        do{
+       srand(time(NULL));
        linha = 1 + rand()%8;
        colunaint = 1 + rand()%8;
        if(pecastab[linha][colunaint]=='o'){
-                if((colunaint == 2||4||6||8 && linha == 1||3||5||7) || (colunaint == 1||3||5||7 && linha == 2||4||6||8)){
+            if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
+                if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ' || pecastab[linha+1][colunaint-1]=='x' || pecastab[linha+1][colunaint+1] =='x'){
                     posicao_correta = true;
                 }
+                if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ' || pecastab[linha-1][colunaint-1]=='x' || pecastab[linha-1][colunaint+1] =='x'){
+                    posicao_correta = true;
+                }
+            }
        }
        }while(posicao_correta == false);
        // Verificação posição final
        do{
+       srand(time(NULL));
        nova_colunaint = 1 + rand()%8;
        nova_linha = 1 + rand()%8;
-       if((pecastab[nova_linha][nova_colunaint]=='1') || (pecastab[nova_linha][nova_colunaint]=='o') || (pecastab[nova_linha][nova_colunaint]=='x')){
-          posicao_correta = false;
-       }
-       else{
-            if((nova_colunaint == colunaint-1 || nova_colunaint == colunaint+1) && nova_linha == linha-1){
-                if(nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8){
-                    posicao_correta = true;
-                }
-                else{
-                    posicao_correta = false;
-                }
-            }
-            else{
-               posicao_correta = false;
+       if((nova_colunaint == colunaint-1 || nova_colunaint == colunaint+1) && nova_linha == linha-1){
+            if(nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8){
+                posicao_final_correta = true;
             }
        }
-       }while(posicao_correta == false);
+
+       }while(posicao_final_correta == false);
 
        pecastab[linha][colunaint] = ' ';
        pecastab[nova_linha][nova_colunaint] = 'o';
@@ -104,138 +102,124 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
        cin >> nova_coluna >> nova_linha;
        nova_colunaint = (int)nova_coluna - 96;
 
-       if((pecastab[nova_linha][nova_colunaint]=='1')||(pecastab[nova_linha][nova_colunaint]=='x') || (pecastab[nova_linha][nova_colunaint]=='o')){
-          cout << "     Posição final inválida" << endl;
-       }
-       else{
-            if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha-1){
-                if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
-                    pecastab[linha][colunaint] = ' ';
-                    pecastab[nova_linha][nova_colunaint] = 'o';
-                    posicao_final_correta = true;
-                }
-                else{
-                    cout << "     Posição final inválida" << endl;
-                }
+       if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha-1){
+            if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
+                pecastab[linha][colunaint] = ' ';
+                pecastab[nova_linha][nova_colunaint] = 'o';
+                posicao_final_correta = true;
             }
-            if(abs(nova_linha-linha)==2 && abs(nova_colunaint-colunaint)==2){
-                if(nova_linha>linha){
-                    linha_intermediaria = nova_linha-1;
-                }
-                else{
-                    linha_intermediaria = nova_linha+1;
-                }
-                if(nova_colunaint>colunaint){
-                    coluna_intermediaria = nova_colunaint-1;
-                }
-                else{
-                    coluna_intermediaria = nova_colunaint+1;
-                }
-                if(pecastab[linha_intermediaria][coluna_intermediaria]=='x'){
-                    pecastab[linha][colunaint] = ' ';
-                    pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
-                    pecastab[nova_linha][nova_colunaint] = 'o';
-                    posicao_final_correta = true;
-                }
-                else{
-                    cout << "     Posição final inválida" << endl;
-                }
+       }
+       if(abs(nova_linha-linha)==2 && abs(nova_colunaint-colunaint)==2){
+            if(nova_linha>linha){
+                linha_intermediaria = nova_linha-1;
             }
             else{
-                cout << "     Posição final inválida" << endl;
+                linha_intermediaria = nova_linha+1;
             }
-            if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
-                if(nova_linha>linha){
-                    if(nova_colunaint>colunaint){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-3;
-                    }
-                    else{
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                }
-                else if(nova_linha<linha){
-                    if(nova_colunaint>colunaint){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-3;
-                    }
-                    else{
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                }
-                else if(nova_linha==linha){
-                    if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='x'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-1;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_coluna-3;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint+1]=='x' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='x'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+1;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint-1]=='x' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='x'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+1;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-3;
-                    }
-                    if(pecastab[nova_linha-1][nova_colunaint+1]=='x' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-1][nova_colunaint+3]=='x'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-1;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                }
-                else if(nova_colunaint==colunaint){
-                    if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='x'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_coluna-1;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint-1]=='x' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+3][nova_colunaint-1]=='x'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-1;
-                    }
-                    if(pecastab[nova_linha-1][nova_colunaint+1]=='x' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-3][nova_colunaint+1]=='x'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+1;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint+1]=='x' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+3][nova_colunaint+1]=='x'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+1;
-                    }
-                }
-                if(pecastab[linha_intermediaria][coluna_intermediaria]=='x' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='x'){
-                    pecastab[linha][colunaint] = ' ';
-                    pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
-                    pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
-                    pecastab[nova_linha][nova_colunaint] = 'o';
-                    posicao_final_correta = true;
+            if(nova_colunaint>colunaint){
+                coluna_intermediaria = nova_colunaint-1;
+            }
+            else{
+                coluna_intermediaria = nova_colunaint+1;
+            }
+            if(pecastab[linha_intermediaria][coluna_intermediaria]=='x'){
+                pecastab[linha][colunaint] = ' ';
+                pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                pecastab[nova_linha][nova_colunaint] = 'o';
+                posicao_final_correta = true;
+            }
+       }
+       if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
+            if(nova_linha>linha){
+                if(nova_colunaint>colunaint){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-3;
                 }
                 else{
-                    cout << "     Posição final inválida" << endl;
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
                 }
             }
+            else if(nova_linha<linha){
+                if(nova_colunaint>colunaint){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-3;
+                }
+                else{
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
+                }
+            }
+            else if(nova_linha==linha){
+                if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='x'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-1;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_coluna-3;
+                }
+                if(pecastab[nova_linha+1][nova_colunaint+1]=='x' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='x'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+1;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
+                }
+                if(pecastab[nova_linha+1][nova_colunaint-1]=='x' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='x'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+1;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-3;
+                }
+                if(pecastab[nova_linha-1][nova_colunaint+1]=='x' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-1][nova_colunaint+3]=='x'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-1;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
+                }
+            }
+            else if(nova_colunaint==colunaint){
+                if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='x'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-1;
+                }
+                if(pecastab[nova_linha+1][nova_colunaint-1]=='x' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+3][nova_colunaint-1]=='x'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-1;
+                }
+                if(pecastab[nova_linha-1][nova_colunaint+1]=='x' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-3][nova_colunaint+1]=='x'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+1;
+                }
+                if(pecastab[nova_linha+1][nova_colunaint+1]=='x' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+3][nova_colunaint+1]=='x'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+1;
+                }
+            }
+            if(pecastab[linha_intermediaria][coluna_intermediaria]=='x' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='x'){
+                pecastab[linha][colunaint] = ' ';
+                pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
+                pecastab[nova_linha][nova_colunaint] = 'o';
+                posicao_final_correta = true;
+            }
+       }
+       if(posicao_final_correta==false){
+           cout << "     Posição final inválida" << endl;
        }
 
        }while(posicao_final_correta == false);
@@ -292,135 +276,124 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
        cin >> nova_coluna >> nova_linha;
        nova_colunaint = (int)nova_coluna - 96;
 
-       if((pecastab[nova_linha][nova_colunaint]=='1')||(pecastab[nova_linha][nova_colunaint]=='x') || (pecastab[nova_linha][nova_colunaint]=='o')){
-          cout << "     Posição final inválida" << endl;
+       if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha+1){
+            if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
+                pecastab[linha][colunaint] = ' ';
+                pecastab[nova_linha][nova_colunaint] = 'x';
+                posicao_final_correta = true;
+            }
        }
-       else{
-            if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha+1){
-                if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
-                    pecastab[linha][colunaint] = ' ';
-                    pecastab[nova_linha][nova_colunaint] = 'x';
-                    posicao_final_correta = true;
+       if(abs(nova_linha-linha)==2 && abs(nova_colunaint-colunaint)==2){
+            if(nova_linha>linha){
+                linha_intermediaria = nova_linha-1;
+            }
+            else{
+                linha_intermediaria = nova_linha+1;
+            }
+            if(nova_colunaint>colunaint){
+                coluna_intermediaria = nova_colunaint-1;
+            }
+            else{
+                coluna_intermediaria = nova_colunaint+1;
+            }
+            if(pecastab[linha_intermediaria][coluna_intermediaria]=='o'){
+                pecastab[linha][colunaint] = ' ';
+                pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                pecastab[nova_linha][nova_colunaint] = 'x';
+                posicao_final_correta = true;
+            }
+       }
+       if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
+            if(nova_linha>linha){
+                if(nova_colunaint>colunaint){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-3;
                 }
                 else{
-                    cout << "     Posição final inválida" << endl;
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
                 }
             }
-            if(abs(nova_linha-linha)==2 && abs(nova_colunaint-colunaint)==2){
-                if(nova_linha>linha){
-                    linha_intermediaria = nova_linha-1;
+            else if(nova_linha<linha){
+                if(nova_colunaint>colunaint){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-3;
                 }
                 else{
-                    linha_intermediaria = nova_linha+1;
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
                 }
-                if(nova_colunaint>colunaint){
+            }
+            else if(nova_linha==linha){
+                if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='o'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-1;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_coluna-3;
+                }
+                if(pecastab[nova_linha+1][nova_colunaint+1]=='o' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='o'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+1;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
+                }
+                if(pecastab[nova_linha+1][nova_colunaint-1]=='o' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='o'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+1;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-3;
+                }
+                if(pecastab[nova_linha-1][nova_colunaint+1]=='o' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-1][nova_colunaint+3]=='o'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-1;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+3;
+                }
+            }
+            else if(nova_colunaint==colunaint){
+                if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='o'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint-1;
                     coluna_intermediaria = nova_colunaint-1;
                 }
-                else{
+                if(pecastab[nova_linha+1][nova_colunaint-1]=='o' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+3][nova_colunaint-1]=='o'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint-1;
+                    coluna_intermediaria = nova_colunaint-1;
+                }
+                if(pecastab[nova_linha-1][nova_colunaint+1]=='o' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-3][nova_colunaint+1]=='o'){
+                    linha_intermediaria2 = nova_linha-1;
+                    linha_intermediaria = nova_linha-3;
+                    coluna_intermediaria2 = nova_colunaint+1;
                     coluna_intermediaria = nova_colunaint+1;
                 }
-                if(pecastab[linha_intermediaria][coluna_intermediaria]=='o'){
-                    pecastab[linha][colunaint] = ' ';
-                    pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
-                    pecastab[nova_linha][nova_colunaint] = 'x';
-                    posicao_final_correta = true;
-                }
-                else{
-                    cout << "     Posição final inválida" << endl;
+                if(pecastab[nova_linha+1][nova_colunaint+1]=='o' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+3][nova_colunaint+1]=='o'){
+                    linha_intermediaria2 = nova_linha+1;
+                    linha_intermediaria = nova_linha+3;
+                    coluna_intermediaria2 = nova_colunaint+1;
+                    coluna_intermediaria = nova_colunaint+1;
                 }
             }
-            if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
-                if(nova_linha>linha){
-                    if(nova_colunaint>colunaint){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-3;
-                    }
-                    else{
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                }
-                else if(nova_linha<linha){
-                    if(nova_colunaint>colunaint){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-3;
-                    }
-                    else{
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                }
-                else if(nova_linha==linha){
-                    if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='o'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-1;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_coluna-3;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint+1]=='o' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='o'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+1;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint-1]=='o' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+1][nova_colunaint-3]=='o'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+1;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-3;
-                    }
-                    if(pecastab[nova_linha-1][nova_colunaint+1]=='o' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-1][nova_colunaint+3]=='o'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-1;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+3;
-                    }
-                }
-                else if(nova_colunaint==colunaint){
-                    if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='o'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_coluna-1;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint-1]=='o' && pecastab[nova_linha+2][nova_colunaint-2]==' ' && pecastab[nova_linha+3][nova_colunaint-1]=='o'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint-1;
-                        coluna_intermediaria = nova_colunaint-1;
-                    }
-                    if(pecastab[nova_linha-1][nova_colunaint+1]=='o' && pecastab[nova_linha-2][nova_colunaint+2]==' ' && pecastab[nova_linha-3][nova_colunaint+1]=='o'){
-                        linha_intermediaria2 = nova_linha-1;
-                        linha_intermediaria = nova_linha-3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+1;
-                    }
-                    if(pecastab[nova_linha+1][nova_colunaint+1]=='o' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+3][nova_colunaint+1]=='o'){
-                        linha_intermediaria2 = nova_linha+1;
-                        linha_intermediaria = nova_linha+3;
-                        coluna_intermediaria2 = nova_colunaint+1;
-                        coluna_intermediaria = nova_colunaint+1;
-                    }
-                }
-                if(pecastab[linha_intermediaria][coluna_intermediaria]=='o' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='o'){
+            if(pecastab[linha_intermediaria][coluna_intermediaria]=='o' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='o'){
                     pecastab[linha][colunaint] = ' ';
                     pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
                     pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
                     pecastab[nova_linha][nova_colunaint] = 'x';
                     posicao_final_correta = true;
-               }
-               else{
-                    cout << "     Posição final inválida" << endl;
-               }
-           }
+            }
+        }
+       if(posicao_final_correta==false){
+           cout << "     POsição final inválida" << endl;
        }
 
        }while(posicao_final_correta == false);
@@ -488,6 +461,5 @@ int main(){
              return 0;
           }
       }
-
       return 0;
 }
