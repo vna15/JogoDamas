@@ -85,22 +85,18 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
        colunaint = (int)coluna - 96;
 
        if(pecastab[linha][colunaint]=='o'){
-            if((pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ')||(pecastab[linha-1][colunaint-1]=='x' || pecastab[linha-1][colunaint+1] =='x')){
-                if((colunaint == 2||4||6||8 && linha == 1||3||5||7) || (colunaint == 1||3||5||7 && linha == 2||4||6||8)){
+            if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
+                if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ' || pecastab[linha+1][colunaint-1]=='x' || pecastab[linha+1][colunaint+1] =='x'){
                     posicao_correta = true;
                 }
-                else{
-                    cout << "     Posição inválida" << endl;
+                if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ' || pecastab[linha-1][colunaint-1]=='x' || pecastab[linha-1][colunaint+1] =='x'){
+                    posicao_correta = true;
                 }
             }
-            else{
-                cout << "     Posição inválida" << endl;
-            }
        }
-       else{
-         cout << "     Posição inválida" << endl;
+       if(posicao_correta==false){
+          cout << "     Posição inválida" << endl;
        }
-
        }while(posicao_correta == false);
        // Verificação posição final
        do{
@@ -276,19 +272,16 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
        colunaint = (int)coluna - 96;
 
        if(pecastab[linha][colunaint]=='x'){
-            if((pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ')||(pecastab[linha+1][colunaint-1]=='o' || pecastab[linha+1][colunaint+1] =='o')){
-                if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
+            if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
+                if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ' || pecastab[linha+1][colunaint-1]=='o' || pecastab[linha+1][colunaint+1] =='o'){
                     posicao_correta = true;
                 }
-                else{
-                    cout << "     Posição inválida" << endl;
+                if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ' || pecastab[linha-1][colunaint-1]=='o' || pecastab[linha-1][colunaint+1] =='o'){
+                    posicao_correta = true;
                 }
             }
-            else{
-                cout << "     Posição inválida" << endl;
-            }
        }
-       else{
+       if(posicao_correta==false){
           cout << "     Posição inválida" << endl;
        }
 
