@@ -2,7 +2,6 @@
 #include <locale>
 #include <cstdlib>
 #include <cmath>
-#include <ctime>
 
 using namespace std;
 
@@ -32,43 +31,76 @@ void tabuleiro(char pecastab[9][9]){
 
 }
 void computador(char pecastab[9][9], bool &fim_de_jogo){
-       bool posicao_correta = false, posicao_final_correta = false;
-       int linha, colunaint, nova_colunaint, nova_linha;
+       bool posicao_correta = false;
+       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, linha_intermediaria2, coluna_intermediaria, coluna_intermediaria2, cont=0;
+       cout << endl << "     Vez do Computador" << endl;
 
-       // Verificação posição inicial
        do{
        srand(time(NULL));
        linha = 1 + rand()%8;
        colunaint = 1 + rand()%8;
-       if(pecastab[linha][colunaint]=='o'){
-            if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
-                if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ' || pecastab[linha+1][colunaint-1]=='x' || pecastab[linha+1][colunaint+1] =='x'){
-                    posicao_correta = true;
-                }
-                if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ' || pecastab[linha-1][colunaint-1]=='x' || pecastab[linha-1][colunaint+1] =='x'){
-                    posicao_correta = true;
-                }
-            }
-       }
-       }while(posicao_correta == false);
-       // Verificação posição final
-       do{
-       srand(time(NULL));
-       nova_colunaint = 1 + rand()%8;
-       nova_linha = 1 + rand()%8;
-       if((nova_colunaint == colunaint-1 || nova_colunaint == colunaint+1) && nova_linha == linha-1){
-            if(nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8){
-                posicao_final_correta = true;
-            }
-       }
 
-       }while(posicao_final_correta == false);
+       if(pecastab[linha][colunaint]=='o'){
+           if(pecastab[linha-1][colunaint-1]==' '){
+               nova_linha = linha-1;
+               nova_colunaint = colunaint-1;
+               posicao_correta = true;
+           }
+           if(pecastab[linha-1][colunaint+1] ==' '){
+               nova_linha = linha-1;
+               nova_colunaint = colunaint+1;
+               posicao_correta = true;
+           }
+           if(pecastab[linha-1][colunaint-1]=='x' && pecastab[linha-2][colunaint-2]==' '){
+               nova_linha = linha-2;
+               nova_colunaint = colunaint-2;
+               linha_intermediaria = linha-1;
+               coluna_intermediaria = colunaint-1;
+               posicao_correta = true;
+           }
+           if(pecastab[linha-1][colunaint+1] =='x' && pecastab[linha-2][colunaint+2] ==' '){
+               nova_linha = linha-2;
+               nova_colunaint = colunaint+2;
+               linha_intermediaria = linha-1;
+               coluna_intermediaria = colunaint+1;
+               posicao_correta = true;
+           }
+           if(pecastab[linha+1][colunaint-1]=='x' && pecastab[linha+2][colunaint-2]==' '){
+               nova_linha = linha+2;
+               nova_colunaint = colunaint-2;
+               linha_intermediaria = linha+1;
+               coluna_intermediaria = colunaint-1;
+               posicao_correta = true;
+           }
+           if(pecastab[linha+1][colunaint+1] =='x' && pecastab[linha+2][colunaint+2] ==' '){
+               nova_linha = linha+2;
+               nova_colunaint = colunaint+2;
+               linha_intermediaria = linha+1;
+               coluna_intermediaria = colunaint+1;
+               posicao_correta = true;
+           }
+       }
+       }while(posicao_correta==false);
 
        pecastab[linha][colunaint] = ' ';
        pecastab[nova_linha][nova_colunaint] = 'o';
+       if(abs(nova_linha-linha)==2 && abs(nova_colunaint-colunaint)==2){
+           pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+       }
 
        tabuleiro(pecastab);
-       fim_de_jogo = false;
+
+       for(int i=1;i<9;i++){
+         for(int j=1;j<9;j++){
+            if(pecastab[i][j]=='x'){
+                cont++;
+            }
+         }
+       }
+       if(cont==0){
+         cout << "     COMPUTADOR VENCEU" << endl;
+         fim_de_jogo = true;
+       }
 }
 
 void jogador2(char pecastab[9][9], bool &fim_de_jogo){
@@ -83,17 +115,24 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
        colunaint = (int)coluna - 96;
 
        if(pecastab[linha][colunaint]=='o'){
-            if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
-                if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ' || pecastab[linha+1][colunaint-1]=='x' || pecastab[linha+1][colunaint+1] =='x'){
-                    posicao_correta = true;
-                }
-                if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ' || pecastab[linha-1][colunaint-1]=='x' || pecastab[linha-1][colunaint+1] =='x'){
-                    posicao_correta = true;
-                }
-            }
+           if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' '){
+               posicao_correta = true;
+           }
+           if(pecastab[linha-1][colunaint-1]=='x' && pecastab[linha-2][colunaint-2]==' '){
+               posicao_correta = true;
+           }
+           if(pecastab[linha-1][colunaint+1] =='x' && pecastab[linha-2][colunaint+2] ==' '){
+               posicao_correta = true;
+           }
+           if(pecastab[linha+1][colunaint-1]=='x' && pecastab[linha+2][colunaint-2]==' '){
+               posicao_correta = true;
+           }
+           if(pecastab[linha+1][colunaint+1] =='x' && pecastab[linha+2][colunaint+2] ==' '){
+               posicao_correta = true;
+           }
        }
        if(posicao_correta==false){
-          cout << "     Posição inválida" << endl;
+          cout << "     Posição inicial inválida" << endl;
        }
        }while(posicao_correta == false);
        // Verificação posição final
@@ -103,7 +142,7 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
        nova_colunaint = (int)nova_coluna - 96;
 
        if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha-1){
-            if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
+            if(pecastab[nova_linha][nova_colunaint]==' '){
                 pecastab[linha][colunaint] = ' ';
                 pecastab[nova_linha][nova_colunaint] = 'o';
                 posicao_final_correta = true;
@@ -123,10 +162,12 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                 coluna_intermediaria = nova_colunaint+1;
             }
             if(pecastab[linha_intermediaria][coluna_intermediaria]=='x'){
-                pecastab[linha][colunaint] = ' ';
-                pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
-                pecastab[nova_linha][nova_colunaint] = 'o';
-                posicao_final_correta = true;
+                if(pecastab[nova_linha][nova_colunaint]==' '){
+                    pecastab[linha][colunaint] = ' ';
+                    pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                    pecastab[nova_linha][nova_colunaint] = 'o';
+                    posicao_final_correta = true;
+                }
             }
        }
        if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
@@ -144,7 +185,7 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                     coluna_intermediaria = nova_colunaint+3;
                 }
             }
-            else if(nova_linha<linha){
+            if(nova_linha<linha){
                 if(nova_colunaint>colunaint){
                     linha_intermediaria2 = nova_linha+1;
                     linha_intermediaria = nova_linha+3;
@@ -158,12 +199,12 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                     coluna_intermediaria = nova_colunaint+3;
                 }
             }
-            else if(nova_linha==linha){
+            if(nova_linha==linha){
                 if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='x'){
                     linha_intermediaria2 = nova_linha-1;
                     linha_intermediaria = nova_linha-1;
                     coluna_intermediaria2 = nova_colunaint-1;
-                    coluna_intermediaria = nova_coluna-3;
+                    coluna_intermediaria = nova_colunaint-3;
                 }
                 if(pecastab[nova_linha+1][nova_colunaint+1]=='x' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='x'){
                     linha_intermediaria2 = nova_linha+1;
@@ -184,7 +225,7 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                     coluna_intermediaria = nova_colunaint+3;
                 }
             }
-            else if(nova_colunaint==colunaint){
+            if(nova_colunaint==colunaint){
                 if(pecastab[nova_linha-1][nova_colunaint-1]=='x' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='x'){
                     linha_intermediaria2 = nova_linha-1;
                     linha_intermediaria = nova_linha-3;
@@ -211,17 +252,18 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                 }
             }
             if(pecastab[linha_intermediaria][coluna_intermediaria]=='x' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='x'){
-                pecastab[linha][colunaint] = ' ';
-                pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
-                pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
-                pecastab[nova_linha][nova_colunaint] = 'o';
-                posicao_final_correta = true;
+                if(pecastab[nova_linha][nova_colunaint]==' '){
+                    pecastab[linha][colunaint] = ' ';
+                    pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                    pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
+                    pecastab[nova_linha][nova_colunaint] = 'o';
+                    posicao_final_correta = true;
+               }
             }
        }
        if(posicao_final_correta==false){
            cout << "     Posição final inválida" << endl;
        }
-
        }while(posicao_final_correta == false);
 
        tabuleiro(pecastab);
@@ -234,15 +276,15 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
          }
        }
        if(cont==0){
-         cout << "JOGADOR 2 VENCEU" << endl;
+         cout << "     JOGADOR 2 VENCEU" << endl;
          fim_de_jogo = true;
        }
 
 }
-void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
+void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois, bool &reiniciar){
        bool posicao_correta = false, posicao_final_correta = false;
        char coluna, nova_coluna;
-       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, coluna_intermediaria, linha_intermediaria2, coluna_intermediaria2, cont=0;
+       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, coluna_intermediaria, linha_intermediaria2, coluna_intermediaria2, cont=0, recomecar;
        if(um_ou_dois == 1){
           cout << endl << "     Vez do Jogador 1" << endl;
        }
@@ -256,19 +298,25 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
        colunaint = (int)coluna - 96;
 
        if(pecastab[linha][colunaint]=='x'){
-            if((colunaint == 1||3||5||7 && linha == 2||4||6||8) || (colunaint == 2||4||6||8 && linha == 1||3||5||7)){
-                if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' ' || pecastab[linha+1][colunaint-1]=='o' || pecastab[linha+1][colunaint+1] =='o'){
-                    posicao_correta = true;
-                }
-                if(pecastab[linha-1][colunaint-1]==' ' || pecastab[linha-1][colunaint+1] ==' ' || pecastab[linha-1][colunaint-1]=='o' || pecastab[linha-1][colunaint+1] =='o'){
-                    posicao_correta = true;
-                }
+            if(pecastab[linha+1][colunaint-1]==' ' || pecastab[linha+1][colunaint+1] ==' '){
+                posicao_correta = true;
+            }
+            if(pecastab[linha-1][colunaint-1]=='o' && pecastab[linha-2][colunaint-2]==' '){
+                posicao_correta = true;
+            }
+            if(pecastab[linha-1][colunaint+1] =='o' && pecastab[linha-2][colunaint+2] ==' '){
+                posicao_correta = true;
+            }
+            if(pecastab[linha+1][colunaint-1]=='o' && pecastab[linha+2][colunaint-2]==' '){
+                posicao_correta = true;
+            }
+            if(pecastab[linha+1][colunaint+1] =='o' && pecastab[linha+2][colunaint+2] ==' '){
+                posicao_correta = true;
             }
        }
        if(posicao_correta==false){
-          cout << "     Posição inválida" << endl;
+          cout << "     Posição inicial inválida" << endl;
        }
-
        }while(posicao_correta == false);
        // Verificação posição final
        do{
@@ -277,7 +325,7 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
        nova_colunaint = (int)nova_coluna - 96;
 
        if((nova_colunaint == colunaint+1 || nova_colunaint == colunaint-1) && nova_linha == linha+1){
-            if((nova_colunaint == 1||3||5||7 && nova_linha == 2||4||6||8) || (nova_colunaint == 2||4||6||8 && nova_linha == 1||3||5||7)){
+            if(pecastab[nova_linha][nova_colunaint]==' '){
                 pecastab[linha][colunaint] = ' ';
                 pecastab[nova_linha][nova_colunaint] = 'x';
                 posicao_final_correta = true;
@@ -297,10 +345,12 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
                 coluna_intermediaria = nova_colunaint+1;
             }
             if(pecastab[linha_intermediaria][coluna_intermediaria]=='o'){
-                pecastab[linha][colunaint] = ' ';
-                pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
-                pecastab[nova_linha][nova_colunaint] = 'x';
-                posicao_final_correta = true;
+                if(pecastab[nova_linha][nova_colunaint]==' '){
+                    pecastab[linha][colunaint] = ' ';
+                    pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
+                    pecastab[nova_linha][nova_colunaint] = 'x';
+                    posicao_final_correta = true;
+               }
             }
        }
        if((abs(nova_linha-linha)==4 && abs(nova_colunaint-colunaint)==4)||(nova_linha-linha==0 && abs(nova_colunaint-colunaint)==4)||(abs(nova_linha-linha)==4 && nova_colunaint-colunaint==0)){
@@ -318,7 +368,7 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
                     coluna_intermediaria = nova_colunaint+3;
                 }
             }
-            else if(nova_linha<linha){
+            if(nova_linha<linha){
                 if(nova_colunaint>colunaint){
                     linha_intermediaria2 = nova_linha+1;
                     linha_intermediaria = nova_linha+3;
@@ -332,12 +382,12 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
                     coluna_intermediaria = nova_colunaint+3;
                 }
             }
-            else if(nova_linha==linha){
+            if(nova_linha==linha){
                 if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-1][nova_colunaint-3]=='o'){
                     linha_intermediaria2 = nova_linha-1;
                     linha_intermediaria = nova_linha-1;
                     coluna_intermediaria2 = nova_colunaint-1;
-                    coluna_intermediaria = nova_coluna-3;
+                    coluna_intermediaria = nova_colunaint-3;
                 }
                 if(pecastab[nova_linha+1][nova_colunaint+1]=='o' && pecastab[nova_linha+2][nova_colunaint+2]==' ' && pecastab[nova_linha+1][nova_colunaint+3]=='o'){
                     linha_intermediaria2 = nova_linha+1;
@@ -358,7 +408,7 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
                     coluna_intermediaria = nova_colunaint+3;
                 }
             }
-            else if(nova_colunaint==colunaint){
+            if(nova_colunaint==colunaint){
                 if(pecastab[nova_linha-1][nova_colunaint-1]=='o' && pecastab[nova_linha-2][nova_colunaint-2]==' ' && pecastab[nova_linha-3][nova_colunaint-1]=='o'){
                     linha_intermediaria2 = nova_linha-1;
                     linha_intermediaria = nova_linha-3;
@@ -385,17 +435,18 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
                 }
             }
             if(pecastab[linha_intermediaria][coluna_intermediaria]=='o' && pecastab[linha_intermediaria2][coluna_intermediaria2]=='o'){
+                if(pecastab[nova_linha][nova_colunaint]==' '){
                     pecastab[linha][colunaint] = ' ';
                     pecastab[linha_intermediaria][coluna_intermediaria] = ' ';
                     pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
                     pecastab[nova_linha][nova_colunaint] = 'x';
                     posicao_final_correta = true;
+                }
             }
         }
        if(posicao_final_correta==false){
            cout << "     POsição final inválida" << endl;
        }
-
        }while(posicao_final_correta == false);
 
        tabuleiro(pecastab);
@@ -410,17 +461,23 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois){
        if(cont==0){
           fim_de_jogo = true;
             if(um_ou_dois == 1){
-               cout << "JOGADOR 1 VENCEU" << endl;
+               cout << "     JOGADOR 1 VENCEU" << endl;
             }
             if(um_ou_dois == 2){
-               cout << "VOCÊ GANHOU" << endl;
+               cout << "     VOCÊ GANHOU" << endl;
+            }
+            cout << "     Deseja começar outra partida?" << endl;
+            cout << "     1 - Sim" << endl << "     2 - Não" << endl;
+            cin >> recomecar;
+            if(recomecar == 1){
+                reiniciar = true;
             }
        }
 }
 int main(){
 
       setlocale(LC_ALL, "Portuguese");
-      bool fim_de_jogo = false;
+      bool fim_de_jogo = false, reiniciar = false;
       int menu_choice, um_ou_dois;
 
       char pecastab[9][9]  =  {'1','1','1','1','1','1','1','1','1',
@@ -443,9 +500,14 @@ int main(){
           cout << endl << "      Jogador 1: peça x" << endl << "      Jogador 2: peça o" << endl;
           um_ou_dois = 1;
           do{
-             jogador1(pecastab, fim_de_jogo, um_ou_dois);
-             jogador2(pecastab, fim_de_jogo);
-          }while(fim_de_jogo == false );
+             do{
+                 jogador1(pecastab, fim_de_jogo, um_ou_dois, reiniciar);
+                 if(fim_de_jogo == true){
+                     break;
+                 }
+                 jogador2(pecastab, fim_de_jogo);
+             }while(fim_de_jogo == false);
+          }while(reiniciar == false);
       }
       else{
           if(menu_choice == 2){
@@ -453,13 +515,19 @@ int main(){
              cout << "     Você jogará com as peças x" << endl;
              um_ou_dois = 2;
              do{
-               jogador1(pecastab, fim_de_jogo, um_ou_dois);
-               computador(pecastab, fim_de_jogo);
-             }while(fim_de_jogo == false);
+                do{
+                   jogador1(pecastab, fim_de_jogo, um_ou_dois, reiniciar);
+                   if(fim_de_jogo == true){
+                      break;
+                   }
+                   computador(pecastab, fim_de_jogo);
+                }while(fim_de_jogo == false);
+             }while(reiniciar == false);
           }
           else{
              return 0;
           }
       }
+
       return 0;
 }
