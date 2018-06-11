@@ -30,9 +30,9 @@ void tabuleiro(char pecastab[9][9]){
 
 
 }
-void computador(char pecastab[9][9], bool &fim_de_jogo){
+void computador(char pecastab[9][9], bool &fim_de_jogo, bool &reiniciar){
        bool posicao_correta = false;
-       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, linha_intermediaria2, coluna_intermediaria, coluna_intermediaria2, cont=0;
+       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, coluna_intermediaria, cont=0, recomecar;
        cout << endl << "     Vez do Computador" << endl;
 
        do{
@@ -100,13 +100,19 @@ void computador(char pecastab[9][9], bool &fim_de_jogo){
        if(cont==0){
          cout << "     COMPUTADOR VENCEU" << endl;
          fim_de_jogo = true;
+         cout << "     Deseja começar outra partida?" << endl;
+         cout << "     1 - Sim" << endl << "     2 - Não" << endl;
+         cin >> recomecar;
+         if(recomecar == 1){
+            reiniciar = true;
+         }
        }
 }
 
-void jogador2(char pecastab[9][9], bool &fim_de_jogo){
+void jogador2(char pecastab[9][9], bool &fim_de_jogo, bool &reiniciar){
        bool posicao_correta = false, posicao_final_correta = false;
        char coluna, nova_coluna;
-       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, linha_intermediaria2, coluna_intermediaria, coluna_intermediaria2, cont=0;
+       int linha, colunaint, nova_colunaint, nova_linha, linha_intermediaria, linha_intermediaria2, coluna_intermediaria, coluna_intermediaria2, cont=0, recomecar;
        cout << endl << "     Vez do Jogador 2" << endl;
        // Verificação posição inicial
        do{
@@ -258,9 +264,9 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
                     pecastab[linha_intermediaria2][coluna_intermediaria2] = ' ';
                     pecastab[nova_linha][nova_colunaint] = 'o';
                     posicao_final_correta = true;
-               }
+                }
             }
-       }
+        }
        if(posicao_final_correta==false){
            cout << "     Posição final inválida" << endl;
        }
@@ -276,8 +282,14 @@ void jogador2(char pecastab[9][9], bool &fim_de_jogo){
          }
        }
        if(cont==0){
-         cout << "     JOGADOR 2 VENCEU" << endl;
+         cout << "     JOGADOR 2 VENCEU" << endl << endl;
          fim_de_jogo = true;
+         cout << "     Deseja começar outra partida?" << endl;
+         cout << "     1 - Sim" << endl << "     2 - Não" << endl;
+         cin >> recomecar;
+         if(recomecar == 1){
+            reiniciar = true;
+         }
        }
 
 }
@@ -461,10 +473,10 @@ void jogador1(char pecastab[9][9], bool &fim_de_jogo, int um_ou_dois, bool &rein
        if(cont==0){
           fim_de_jogo = true;
             if(um_ou_dois == 1){
-               cout << "     JOGADOR 1 VENCEU" << endl;
+               cout << "     JOGADOR 1 VENCEU" << endl << endl;
             }
             if(um_ou_dois == 2){
-               cout << "     VOCÊ GANHOU" << endl;
+               cout << "     VOCÊ GANHOU" << endl << endl;
             }
             cout << "     Deseja começar outra partida?" << endl;
             cout << "     1 - Sim" << endl << "     2 - Não" << endl;
@@ -480,22 +492,22 @@ int main(){
       bool fim_de_jogo = false, reiniciar = false;
       int menu_choice, um_ou_dois;
 
-      char pecastab[9][9]  =  {'1','1','1','1','1','1','1','1','1',
-                               '1','1','x','1','x','1','x','1','x',
-                               '1','x','1','x','1','x','1','x','1',
-                               '1','1','x','1','x','1','x','1','x',
-                               '1',' ','1',' ','1',' ','1',' ','1',
-                               '1','1',' ','1',' ','1',' ','1',' ',
-                               '1','o','1','o','1','o','1','o','1',
-                               '1','1','o','1','o','1','o','1','o',
-                               '1','o','1','o','1','o','1','o','1'};
-
       cout << "                    MENU" << endl;
       cout << "     Digite 1 para jogar contra outro jogador" << endl;
       cout << "     Digite 2 para jogar contra o computador" << endl;
       cout << "     Digite 3 para sair" << endl;
       cin >> menu_choice;
       if(menu_choice == 1){
+          reinicio:
+          char pecastab[9][9]  =  {'1','1','1','1','1','1','1','1','1',
+                                   '1','1','x','1','x','1','x','1','x',
+                                   '1','x','1','x','1','x','1','x','1',
+                                   '1','1','x','1','x','1','x','1','x',
+                                   '1',' ','1',' ','1',' ','1',' ','1',
+                                   '1','1',' ','1',' ','1',' ','1',' ',
+                                   '1','o','1','o','1','o','1','o','1',
+                                   '1','1','o','1','o','1','o','1','o',
+                                   '1','o','1','o','1','o','1','o','1'};
           tabuleiro(pecastab);
           cout << endl << "      Jogador 1: peça x" << endl << "      Jogador 2: peça o" << endl;
           um_ou_dois = 1;
@@ -505,12 +517,28 @@ int main(){
                  if(fim_de_jogo == true){
                      break;
                  }
-                 jogador2(pecastab, fim_de_jogo);
+                 jogador2(pecastab, fim_de_jogo, reiniciar);
+                 if(fim_de_jogo == true){
+                     break;
+                 }
              }while(fim_de_jogo == false);
+             if(reiniciar == true){
+                goto reinicio;
+             }
           }while(reiniciar == false);
       }
       else{
           if(menu_choice == 2){
+             reinicio2:
+             char pecastab[9][9]  =  {'1','1','1','1','1','1','1','1','1',
+                                      '1','1','x','1','x','1','x','1','x',
+                                      '1','x','1','x','1','x','1','x','1',
+                                      '1','1','x','1','x','1','x','1','x',
+                                      '1',' ','1',' ','1',' ','1',' ','1',
+                                      '1','1',' ','1',' ','1',' ','1',' ',
+                                      '1','o','1','o','1','o','1','o','1',
+                                      '1','1','o','1','o','1','o','1','o',
+                                      '1','o','1','o','1','o','1','o','1'};
              tabuleiro(pecastab);
              cout << "     Você jogará com as peças x" << endl;
              um_ou_dois = 2;
@@ -520,8 +548,14 @@ int main(){
                    if(fim_de_jogo == true){
                       break;
                    }
-                   computador(pecastab, fim_de_jogo);
+                   computador(pecastab, fim_de_jogo, reiniciar);
+                   if(fim_de_jogo == true){
+                      break;
+                   }
                 }while(fim_de_jogo == false);
+                if(reiniciar == true){
+                    goto reinicio2;
+                }
              }while(reiniciar == false);
           }
           else{
