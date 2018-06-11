@@ -512,20 +512,18 @@ int main(){
           cout << endl << "      Jogador 1: peça x" << endl << "      Jogador 2: peça o" << endl;
           um_ou_dois = 1;
           do{
-             do{
-                 jogador1(pecastab, fim_de_jogo, um_ou_dois, reiniciar);
-                 if(fim_de_jogo == true){
-                     break;
-                 }
-                 jogador2(pecastab, fim_de_jogo, reiniciar);
-                 if(fim_de_jogo == true){
-                     break;
-                 }
-             }while(fim_de_jogo == false);
-             if(reiniciar == true){
-                goto reinicio;
-             }
-          }while(reiniciar == false);
+            jogador1(pecastab, fim_de_jogo, um_ou_dois, reiniciar);
+                if(fim_de_jogo == true){
+                    break;
+                }
+            jogador2(pecastab, fim_de_jogo, reiniciar);
+                if(fim_de_jogo == true){
+                    break;
+                }
+          }while(fim_de_jogo == false);
+          if(reiniciar == true){
+            goto reinicio;
+          }
       }
       else{
           if(menu_choice == 2){
@@ -543,20 +541,18 @@ int main(){
              cout << "     Você jogará com as peças x" << endl;
              um_ou_dois = 2;
              do{
-                do{
-                   jogador1(pecastab, fim_de_jogo, um_ou_dois, reiniciar);
-                   if(fim_de_jogo == true){
-                      break;
-                   }
-                   computador(pecastab, fim_de_jogo, reiniciar);
-                   if(fim_de_jogo == true){
-                      break;
-                   }
-                }while(fim_de_jogo == false);
+                jogador1(pecastab, fim_de_jogo, um_ou_dois, reiniciar);
+                if(fim_de_jogo == true){
+                    break;
+                }
+                computador(pecastab, fim_de_jogo, reiniciar);
+                if(fim_de_jogo == true){
+                    break;
+                }
+            }while(fim_de_jogo == false);
                 if(reiniciar == true){
                     goto reinicio2;
                 }
-             }while(reiniciar == false);
           }
           else{
              return 0;
